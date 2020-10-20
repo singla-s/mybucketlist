@@ -13,13 +13,16 @@
     </head>
     <body>
     <div class="main">
-        <% if( dayName == "Sunday" || dayName == "Saturday") { %>
-            <h1 style="color: green;">It's a <%= dayName %></h1>
-        <% } else {%>
-            <h1 style="color: blue;">It's a <%= dayName %></h1>
-        <% } %>
-
-
+        <h1> <%= dayName %></h1>
+        <ul>
+            <% wishList.forEach(function(wish) { %>
+            <li> <%= wish %> </li>
+            <% }) %>
+        </ul>
+        <form action="/" method="post">
+            <input type="text" name="wish">
+            <button type="submit" name="button">Add</button>
+        </form>
 
     </div>
 
