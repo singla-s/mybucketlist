@@ -1,5 +1,5 @@
 body {
-    background: url("../image/bucketlist.png") no-repeat;
+    background: url("../image/bg.jpg") no-repeat;
     background-size: cover;
     box-sizing: border-box;
 }
@@ -32,4 +32,8 @@ h5 {
 p {
     font-family: 'Courgette', cursive;
     font-size: 4rem;
+}
+
+.main {
+
 }
