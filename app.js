@@ -16,9 +16,7 @@ app.set('view engine', 'ejs');
 const Wish = mongoose.model('wish',{
                     name: String
                 })
-const wish1 = new Wish({name: "Deep sea diving"});
-const wish2 = new Wish({name: "sky diving"});
-const wish3 = new Wish({name: "Travel through Europe"});
+
 // Wish.insertMany([wish1,wish2,wish3], function(err) {
 //     if(err) {
 //         console.log(err);
@@ -28,23 +26,25 @@ const wish3 = new Wish({name: "Travel through Europe"});
 // });
 
 app.get("/", function(req, res) {
-    const wishList = [];
     Wish.find({},{_id:1, name:1},function(err, wishes) {
         if(err){
             console.log(err);
         } else {
-            // wishList
+            res.render("bucket-list",{dayName : "Today", wishList : wishes});
         }
     });
-
-    res.render("bucket-list",{dayName : "Today", wishList : []});
 });
 
 app.post("/", function(req, res) {
     const wish = req.body.wish;
-    wishList.push(wish);
-    console.log(wishList);
-    console.log(req.body);
+    const wishObject = new Wish({name: wish});
+    wishObject.save(function(err){
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("New wish added!");
+        }
+    });
     res.redirect("/");
 });
 
