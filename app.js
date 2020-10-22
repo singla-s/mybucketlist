@@ -1,30 +1,29 @@
-var express = require("express");
-var app = express();
+const express = require("express");
+const app = express();
+const mongoose = require("mongoose");
 const path = require("path");
-const date = require(path.join(__dirname, "date.js"));
 
-var bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 
+mongoose.connect("mongodb://localhost:27017/todolistDB",{useNewUrlParser: true});
 //Include body parser to read requests
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, "public")));
 // Use EJS
 app.set('view engine', 'ejs');
 
-//load stactic files
-// app.use(express.static(__dirname + "style"));
-// app.use(express.static(__dirname + "image"));
 //////////////////////////Main////////////////////////////////////
-var wishList = ["Learn horse riding", "Sky diving", "Travel through Europe"];
+const Wish = mongoose.model('wish',{
+                    name: String
+                })
 
 
 app.get("/", function(req, res) {
-    const dateToday = date.getDate();
-    res.render("bucket-list",{dayName : dateToday, wishList : wishList});
+    res.render("bucket-list",{dayName : "Today", wishList : wishList});
 });
 
 app.post("/", function(req, res) {
-    var wish = req.body.wish;
+    const wish = req.body.wish;
     wishList.push(wish);
     console.log(wishList);
     console.log(req.body);
