@@ -28,9 +28,15 @@ const wish3 = new Wish({name: "Travel through Europe"});
 // });
 
 app.get("/", function(req, res) {
-    const wishList = Wish.find({},function(err, wishes) {
-        console.log(wishList);
+    const wishList = [];
+    Wish.find({},{_id:1, name:1},function(err, wishes) {
+        if(err){
+            console.log(err);
+        } else {
+            // wishList
+        }
     });
+
     res.render("bucket-list",{dayName : "Today", wishList : []});
 });
 
