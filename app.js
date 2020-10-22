@@ -48,6 +48,12 @@ app.post("/", function(req, res) {
     res.redirect("/");
 });
 
+app.post("/delete/:id", function(req, res) {
+    const deleteWish = req.params.id;
+    Wish.deleteOne({_id: deleteWish},function(err) {
+        res.redirect("/");
+    })
+});
 
 //About
 app.get("/about",function(req, res) {
