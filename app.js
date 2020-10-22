@@ -5,7 +5,7 @@ const path = require("path");
 
 const bodyParser = require("body-parser");
 
-mongoose.connect("mongodb://localhost:27017/todolistDB",{useNewUrlParser: true});
+mongoose.connect("mongodb://localhost:27017/todolistDB",{useNewUrlParser: true},{ useUnifiedTopology: true });
 //Include body parser to read requests
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, "public")));
@@ -16,10 +16,22 @@ app.set('view engine', 'ejs');
 const Wish = mongoose.model('wish',{
                     name: String
                 })
-
+const wish1 = new Wish({name: "Deep sea diving"});
+const wish2 = new Wish({name: "sky diving"});
+const wish3 = new Wish({name: "Travel through Europe"});
+// Wish.insertMany([wish1,wish2,wish3], function(err) {
+//     if(err) {
+//         console.log(err);
+//     } else {
+//         console.log("All wishes created!");
+//     }
+// });
 
 app.get("/", function(req, res) {
-    res.render("bucket-list",{dayName : "Today", wishList : wishList});
+    const wishList = Wish.find({},function(err, wishes) {
+        console.log(wishList);
+    });
+    res.render("bucket-list",{dayName : "Today", wishList : []});
 });
 
 app.post("/", function(req, res) {
