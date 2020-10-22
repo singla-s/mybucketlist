@@ -1,7 +1,7 @@
 <%- include("header") -%>
 <div class="main">
     <div class="box" id="heading">
-        <h1> <%= dayName %></h1>
+        <h1> <%= listName %></h1>
     </div>
     <div class="box">
         <% wishList.forEach(function(wish) { %>
@@ -14,7 +14,7 @@
         <% }) %>
         <form class="item" action="/" method="post">
             <input type="text" name="wish" placeholder="Add wish">
-            <button type="submit" name="button">+</button>
+            <button type="submit" name="button" value= "<%= listName %>">+</button>
         </form>
     </div>
 </div>

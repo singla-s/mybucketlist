@@ -35,47 +35,41 @@ app.get("/", function(req, res) {
         if(err){
             console.log(err);
         } else {
-            res.render("bucket-list",{dayName : "Today", wishList : wishes});
+            res.render("bucket-list",{listName : "Today", wishList : wishes});
         }
     });
 });
 
 app.post("/", function(req, res) {
-    const wish = req.body.wish;
-    const wishObject = new Wish({name: wish});
-    wishObject.save(function(err){
-        if (err) {
-            console.log(err);
-        } else {
-            console.log("New wish added!");
-        }
+    const customListName = req.body.button;
+    const wishObject = new Wish({name: req.body.wish});
+    if(customListName === "Today") {
+        wishObject.save();
+        res.redirect("/");
+    } else {
+        List.findOne({name: customListName}, function(err, wishList) {
+        wishList.wishes.push(wishObject);
+        wishList.save();
+        res.redirect("/" + customListName);
     });
-    res.redirect("/");
+    }
 });
 
 app.get("/:customListName", function(req, res) {
     const customListName = req.params.customListName;
+    console.log(customListName);
     List.findOne({name: customListName},{_id: 0, wishes: 1},function(err, wishLists) {
         if(err){
             console.log(err);
         } else {
-            res.render("bucket-list",{dayName : customListName, wishList : wishLists});
+            if(wishLists == null) {
+                wishLists = [];
+                const list = new List({name: customListName, wishes: []});
+                list.save();
+            }
+            res.render("bucket-list",{listName : customListName, wishList : wishLists.wishes});
         }
     });
-});
-
-app.post("/:customListName", function(req, res) {
-    const customListName = req.params.customListName;
-    const wish = req.body.wish;
-    const wishObject = new Wish({name: wish});
-    wishObject.save(function(err){
-        if (err) {
-            console.log(err);
-        } else {
-            console.log("New wish added!");
-        }
-    });
-    res.redirect("/");
 });
 
 app.post("/delete/:id", function(req, res) {
