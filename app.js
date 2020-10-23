@@ -5,7 +5,7 @@ const path = require("path");
 
 const bodyParser = require("body-parser");
 
-mongoose.connect("mongodb://localhost:27017/todolistDB",{useNewUrlParser: true},{ useUnifiedTopology: true });
+mongoose.connect("mongodb://localhost:27017/todolistDB",{useNewUrlParser: true, useUnifiedTopology: true });
 //Include body parser to read requests
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, "public")));
@@ -76,7 +76,7 @@ app.post("/delete/:id", function(req, res) {
     const deleteWish = req.params.id;
     Wish.deleteOne({_id: deleteWish},function(err) {
         res.redirect("/");
-    })
+    });
 });
 
 //About

@@ -1,7 +1,9 @@
 html {
-    background: url("../image/bg.jpg") no-repeat;
+    background-image: linear-gradient(to bottom, rgba(255,0,0,0), rgb(107 198 232));
+    background-repeat: no-repeat;
     background-size: cover;
     box-sizing: border-box;
+    height: 100vh;
 }
 
 h1 {
@@ -89,7 +91,13 @@ input[type="text"]:focus {
 }
 
 footer {
-  color: white;
-  color: rgba(0, 0, 0, 0.5);
-  text-align: center;
+  position: absolute;
+  bottom: 1rem;
+  color: #ffffff;
+  width: 99%;
+}
+
+footer > div {
+    width: 15rem;
+    margin: 2% auto;
 }
