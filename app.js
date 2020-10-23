@@ -57,7 +57,6 @@ app.post("/", function(req, res) {
 
 app.get("/:customListName", function(req, res) {
     const customListName = req.params.customListName;
-    console.log(customListName);
     List.findOne({name: customListName},{_id: 0, wishes: 1},function(err, wishLists) {
         if(err){
             console.log(err);
@@ -72,11 +71,24 @@ app.get("/:customListName", function(req, res) {
     });
 });
 
-app.post("/delete/:id", function(req, res) {
+app.post("/delete/:id/:listName", function(req, res) {
+    const listName = req.params.listName;
     const deleteWish = req.params.id;
-    Wish.deleteOne({_id: deleteWish},function(err) {
-        res.redirect("/");
-    });
+    if(listName === "Today") {
+        Wish.deleteOne({_id: deleteWish},function(err) {
+            res.redirect("/");
+        });
+    } else {
+        const list = List.findOne({name: listName}, function(err, wishes) {
+            wishes["wishes"].forEach(function(wish,index) {
+                if(deleteWish == wish["_id"]) {
+                    wishes.wishes.splice(index, 1);
+                    wishes.save();
+                    res.redirect("/" + listName);
+                }
+            });
+        });
+    }
 });
 
 //About
