@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const path = require("path");
+const _ = require("lodash");
 
 const bodyParser = require("body-parser");
 
@@ -30,7 +31,7 @@ const List = mongoose.model("list", {
 // });
 
 app.get("/", function(req, res) {
-    const customListName = req.params.customListName;
+    const customListName = _.capitalize(req.params.customListName);
     Wish.find({},{_id:1, name:1},function(err, wishes) {
         if(err){
             console.log(err);
@@ -41,7 +42,7 @@ app.get("/", function(req, res) {
 });
 
 app.post("/", function(req, res) {
-    const customListName = req.body.button;
+    const customListName = _.capitalize(req.body.button);
     const wishObject = new Wish({name: req.body.wish});
     if(customListName === "Today") {
         wishObject.save();
@@ -56,7 +57,7 @@ app.post("/", function(req, res) {
 });
 
 app.get("/:customListName", function(req, res) {
-    const customListName = req.params.customListName;
+    const customListName = _.capitalize(req.params.customListName);
     List.findOne({name: customListName},{_id: 0, wishes: 1},function(err, wishLists) {
         if(err){
             console.log(err);
@@ -65,6 +66,7 @@ app.get("/:customListName", function(req, res) {
                 wishLists = [];
                 const list = new List({name: customListName, wishes: []});
                 list.save();
+                res.render("bucket-list",{listName : customListName, wishList : []})
             }
             res.render("bucket-list",{listName : customListName, wishList : wishLists.wishes});
         }
@@ -72,7 +74,7 @@ app.get("/:customListName", function(req, res) {
 });
 
 app.post("/delete/:id/:listName", function(req, res) {
-    const listName = req.params.listName;
+    const listName = _.capitalize(req.params.listName);
     const deleteWish = req.params.id;
     if(listName === "Today") {
         Wish.deleteOne({_id: deleteWish},function(err) {
